@@ -1,40 +1,75 @@
-tcpdump -i eth0 icmp<br>
-15:36:49.542956 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1975, seq 14, length 40<br>
-15:36:49.542961 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1975, seq 15, length 40<br>
-15:36:49.542963 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1975, seq 16, length 40<br>
-15:36:49.543873 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1975, seq 14, length 40<br>
-15:36:49.543887 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1975, seq 15, length 40<br>
-15:36:49.543890 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1975, seq 16, length 40<br>
+# tcpdump -i eth0 icmp<br>
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode<br>
+listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes<br>
+15:51:12.410998 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 1, length 40<br>
+15:51:12.411005 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 2, length 40<br>
+15:51:12.411008 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 3, length 40<br>
+15:51:12.411011 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 4, length 40<br>
+15:51:12.411013 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 5, length 40<br>
+15:51:12.411015 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 6, length 40<br>
+15:51:12.411019 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 7, length 40<br>
+15:51:12.411021 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 8, length 40<br>
+15:51:12.411024 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 9, length 40<br>
+15:51:12.411027 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 10, length 40<br>
+15:51:12.411029 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 11, length 40<br>
+15:51:12.411032 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 12, length 40<br>
+15:51:12.411037 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 13, length 40<br>
+15:51:12.411039 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 14, length 40<br>
+15:51:12.411042 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 15, length 40<br>
+15:51:12.411045 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 16, length 40<br>
+15:51:12.411277 IP 192.168.24.1 > 192.168.24.240: ICMP time exceeded in-transit, length 36<br>
+15:51:12.411390 IP 192.168.24.1 > 192.168.24.240: ICMP redirect 192.168.40.10 to host 192.168.24.239, length 36<br>
+15:51:12.411443 IP 192.168.24.1 > 192.168.24.240: ICMP time exceeded in-transit, length 36<br>
+15:51:12.411521 IP 192.168.24.1 > 192.168.24.240: ICMP redirect 192.168.40.10 to host 192.168.24.239, length 36<br>
+15:51:12.411580 IP 192.168.24.1 > 192.168.24.240: ICMP time exceeded in-transit, length 36<br>
+15:51:12.411643 IP 192.168.24.1 > 192.168.24.240: ICMP redirect 192.168.40.10 to host 192.168.24.239, length 36<br>
+15:51:12.411716 IP 192.168.24.1 > 192.168.24.240: ICMP redirect 192.168.40.10 to host 192.168.24.239, length 36<br>
+15:51:12.411728 IP 192.168.24.239 > 192.168.24.240: ICMP time exceeded in-transit, length 68<br>
+15:51:12.411730 IP 192.168.24.239 > 192.168.24.240: ICMP time exceeded in-transit, length 68<br>
+15:51:12.411731 IP 192.168.24.239 > 192.168.24.240: ICMP time exceeded in-transit, length 68<br>
+15:51:12.411985 IP 192.168.24.1 > 192.168.24.240: ICMP redirect 192.168.40.10 to host 192.168.24.239, length 36<br>
+15:51:12.412117 IP 192.168.24.1 > 192.168.24.240: ICMP redirect 192.168.40.10 to host 192.168.24.239, length 36<br>
+15:51:12.412202 IP 192.168.24.1 > 192.168.24.240: ICMP redirect 192.168.40.10 to host 192.168.24.239, length 36<br>
+15:51:12.412281 IP 192.168.24.1 > 192.168.24.240: ICMP redirect 192.168.40.10 to host 192.168.24.239, length 36<br>
+15:51:12.412357 IP 192.168.24.1 > 192.168.24.240: ICMP redirect 192.168.40.10 to host 192.168.24.239, length 36<br>
+15:51:12.444197 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 20, length 40<br>
+15:51:12.444212 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 21, length 40<br>
+15:51:12.444219 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2208, seq 22, length 40<br>
+15:51:12.445271 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2208, seq 20, length 40<br>
+15:51:12.445275 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2208, seq 21, length 40<br>
+15:51:12.445276 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2208, seq 22, length 40<br>
 
-tcpdump -i eth0  icmp<br>
-11:25:14.553641 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 1, length 40<br>
-11:25:14.553647 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 2, length 40<br>
-11:25:14.553650 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 3, length 40<br>
-11:25:14.553657 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 4, length 40<br>
-11:25:14.553660 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 5, length 40<br>
-11:25:14.553663 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 6, length 40<br>
-11:25:14.553668 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 7, length 40<br>
-11:25:14.553671 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 8, length 40<br>
-11:25:14.553673 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 9, length 40<br>
-11:25:14.553677 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 10, length 40<br>
-11:25:14.553679 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 11, length 40<br>
-11:25:14.553683 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 12, length 40<br>
-11:25:14.553686 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 13, length 40<br>
-11:25:14.553689 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 14, length 40<br>
-11:25:14.553691 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 15, length 40<br>
-11:25:14.553695 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 1856, seq 16, length 40<br>
-11:25:14.553974 IP 192.168.24.239 > 192.168.24.240: ICMP time exceeded in-transit, length 68<br>
-11:25:14.553982 IP 192.168.24.239 > 192.168.24.240: ICMP time exceeded in-transit, length 68<br>
-11:25:14.553983 IP 192.168.24.239 > 192.168.24.240: ICMP time exceeded in-transit, length 68<br>
-11:25:14.554754 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 4, length 40<br>
-11:25:14.554760 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 5, length 40<br>
-11:25:14.554761 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 6, length 40<br>
-11:25:14.555039 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 7, length 40<br>
-11:25:14.555042 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 8, length 40<br>
-11:25:14.555043 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 9, length 40<br>
-11:25:14.555045 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 10, length 40<br>
-11:25:14.555292 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 11, length 40<br>
-11:25:14.555304 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 12, length 40<br>
-11:25:14.555305 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 13, length 40<br>
-11:25:14.555307 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 14, length 40<br>
-11:25:14.555308 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 1856, seq 15, length 40<br>
+#
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode<br>
+listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes<br>
+15:51:46.808385 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 1, length 40<br>
+15:51:46.808393 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 2, length 40<br>
+15:51:46.808397 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 3, length 40<br>
+15:51:46.808401 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 4, length 40<br>
+15:51:46.808403 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 5, length 40<br>
+15:51:46.808405 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 6, length 40<br>
+15:51:46.808408 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 7, length 40<br>
+15:51:46.808411 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 8, length 40<br>
+15:51:46.808414 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 9, length 40<br>
+15:51:46.808419 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 10, length 40<br>
+15:51:46.808421 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 11, length 40<br>
+15:51:46.808424 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 12, length 40<br>
+15:51:46.808427 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 13, length 40<br>
+15:51:46.808429 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 14, length 40<br>
+15:51:46.808432 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 15, length 40<br>
+15:51:46.808435 IP 192.168.24.240 > 192.168.40.10: ICMP echo request, id 2210, seq 16, length 40<br>
+15:51:46.808692 IP 192.168.24.239 > 192.168.24.240: ICMP time exceeded in-transit, length 68<br>
+15:51:46.808709 IP 192.168.24.239 > 192.168.24.240: ICMP time exceeded in-transit, length 68<br>
+15:51:46.808711 IP 192.168.24.239 > 192.168.24.240: ICMP time exceeded in-transit, length 68<br>
+15:51:46.809412 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 4, length 40<br>
+15:51:46.809417 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 5, length 40<br>
+15:51:46.809419 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 6, length 40<br>
+15:51:46.809514 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 7, length 40<br>
+15:51:46.809517 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 8, length 40<br>
+15:51:46.809730 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 9, length 40<br>
+15:51:46.809733 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 10, length 40<br>
+15:51:46.809734 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 11, length 40<br>
+15:51:46.809736 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 12, length 40<br>
+15:51:46.809956 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 13, length 40<br>
+15:51:46.809969 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 14, length 40<br>
+15:51:46.809970 IP 192.168.40.10 > 192.168.24.240: ICMP echo reply, id 2210, seq 15, length 40<br>
