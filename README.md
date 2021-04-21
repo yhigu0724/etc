@@ -16,7 +16,7 @@ samba-3.5.10-125.el6.x86_64<br>
   128  sysctl -w net.ipv6.bindv6only=1<br>
 
 
-
+max protocol = SMB2<br>
 
 https://ameblo.jp/yama-change/entry-10456338487.html<br>
 
