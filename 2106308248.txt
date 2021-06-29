@@ -22,8 +22,22 @@ https://www.den-tsu.net/kvmsnap/#toc_id_1_8
 virshコマンドの使い方(snapshot編)
 https://qiita.com/hana_shin/items/c43f824f16797e0d7e62
 
+What is the supportability of 'virsh snapshot-delete' and 'virsh snapshot-revert' command in Red Hat Enterprise Linux 7?
+https://access.redhat.com/solutions/426033
+
 Unable to delete KVM snapshot
 https://mangolassi.it/topic/17048/unable-to-delete-kvm-snapshot/4
+
+snapshot-delete domain {snapshot | --current} [--metadata] [{--children | --children-only}]
+           Delete the snapshot for the domain named snapshot, or the current snapshot with --current.  If this snapshot
+           has child snapshots, changes from this snapshot will be merged into the children.  If --children is passed,
+           then delete this snapshot and any children of this snapshot.  If --children-only is passed, then delete any
+           children of this snapshot, but leave this snapshot intact.  These two flags are mutually exclusive.
+
+           If --metadata is specified, then only delete the snapshot metadata maintained by libvirt, while leaving the snapshot contents intact for access by external tools; otherwise deleting a snapshot also removes the data contents from that point in time.
+
+           --metadata が指定された場合、libvirt が保持するスナップショットのメタデータのみを削除し、スナップショットのコンテンツは外部ツールからのアクセスに備えてそのまま残します。でないとスナップショットを削除すると、その時点でのデータ内容も削除されます。
+
 
 
 
