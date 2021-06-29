@@ -22,7 +22,8 @@ https://www.den-tsu.net/kvmsnap/#toc_id_1_8
 virshコマンドの使い方(snapshot編)
 https://qiita.com/hana_shin/items/c43f824f16797e0d7e62
 
-
+Unable to delete KVM snapshot
+https://mangolassi.it/topic/17048/unable-to-delete-kvm-snapshot/4
 
 
 
