@@ -184,6 +184,290 @@ total 196
 ----------------------------------------------------
  2     centos7                        running
 
+[2021-06-20]
+
+■レッドハット社のナレッジ実機検証
+
+# virsh list --all
+setlocale: No such file or directory
+ Id    Name                           State
+----------------------------------------------------
+ -     centos7                        shut off
+
+# virsh start centos7
+Domain centos7 started
+
+# virsh list --all
+
+ Id    Name                           State
+----------------------------------------------------
+ 1     centos7                        running
+
+ # virsh snapshot-create-as centos7 centos7_snap01 "20210630" --disk-only --atomic
+error: Operation not supported: live disk snapshot not supported with this QEMU binary
+
+https://serverfault.com/questions/978574/kvm-rhel-7-5-offline-external-snapshot-taken-but-not-able-to-merge-now-the-disk
+
+
+# virsh shutdown centos7
+
+# virsh snapshot-create-as centos7 centos7_snap01 "20210630" --disk-only --atomic
+Domain snapshot centos7_snap01 created
+
+# virsh start centos7
+Domain centos7 started
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ 2     centos7                        running
+
+# virsh snapshot-list centos7
+ Name                 Creation Time             State
+------------------------------------------------------------
+ centos7_snap01       2021-06-30 11:45:32 +0900 shutoff
+
+
+# virsh snapshot-list centos7 --tree
+centos7_snap01
+
+# ll /var/opt/mcl/part/data/
+total 1687112
+-rw-r--r-- 1 qemu qemu    8060928 Jun 30 11:51 centos7.centos7_snap01
+-rw-r--r-- 1 qemu qemu 1712717824 Jun 30 11:44 centos7.img
+
+# ll /var/opt/mcl/part/data/
+total 1681480
+-rw-r--r-- 1 qemu qemu    9240576 Jun 30 13:01 centos7.centos7_snap01
+-rw-r--r-- 1 qemu qemu 1712717824 Jun 30 11:44 centos7.img
+
+[root@centos71 ~]# pwd
+/root
+[root@centos71 ~]# touch after_snap01.xtx
+[root@centos71 ~]# ll
+total 4
+-rw-r--r--. 1 root root    0 Jun 30 13:12 after_snap01.xtx
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+
+
+# virsh shutdown centos7
+Domain centos7 is being shutdown
+
+# virsh snapshot-delete centos7 centos7_snap01
+error: Failed to delete snapshot centos7_snap01
+error: unsupported configuration: deletion of 1 external disk snapshots not supported yet
+
+
+# virsh edit centos7
+Domain centos7 XML configuration edited.
+
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/opt/mcl/part/data/centos7.centos7_snap01'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/opt/mcl/part/data/centos7.img'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+    
+# rm /var/opt/mcl/part/data/centos7.centos7_snap01 
+rm: remove regular file '/var/opt/mcl/part/data/centos7.centos7_snap01'? y
+
+# virsh snapshot-delete centos7 centos7_snap01 --metadata
+Domain snapshot centos7_snap01 deleted
+
+# virsh start centos7
+Domain centos7 started
+
+# virsh snapshot-list centos7
+ Name                 Creation Time             State
+------------------------------------------------------------
+
+# ll /var/opt/mcl/part/data/
+total 3769668
+-rw-r--r-- 1 qemu qemu 1712848896 Jun 30 13:33 centos7.img
+
+[root@centos71 ~]# pwd
+/root
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+
+
+--------------------------------------------------------------------------------------------
+
+■お客様で実施した内容の検証
+
+# virsh shutdown centos7
+
+# virsh snapshot-create-as centos7 centos7_snap01 "20210630" --disk-only --atomic
+Domain snapshot centos7_snap01 created
+
+# virsh start centos7
+Domain centos7 started
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ 2     centos7                        running
+
+# virsh snapshot-list centos7
+Name                 Creation Time             State
+------------------------------------------------------------
+ centos7_snap01       2021-06-30 13:50:38 +0900 shutoff
+
+
+# virsh snapshot-list centos7 --tree
+centos7_snap01
+
+# ll /var/opt/mcl/part/data/
+total 1679048
+-rw-r--r-- 1 qemu qemu    5242880 Jun 30 13:51 centos7.centos7_snap01
+-rw-r--r-- 1 qemu qemu 1712848896 Jun 30 13:50 centos7.img
+[root@rhel79 ~]# ll -h /var/opt/mcl/part/data/
+
+# pwd
+/root
+[root@centos71 ~]# touch after_snap01.txt
+[root@centos71 ~]# ll
+total 4
+-rw-r--r--. 1 root root    0 Jun 30 13:53 after_snap01.txt
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+
+
+# virsh dumpxml centos7 > domcentos7-before.xml
+
+# less domcentos7-before.xml 
+
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/opt/mcl/part/data/centos7.centos7_snap01'/>
+      <backingStore type='file' index='1'>　★
+        <format type='qcow2'/>
+        <source file='/var/opt/mcl/part/data/centos7.img'/>
+        <backingStore/>
+      </backingStore>
+      <target dev='hda' bus='ide'/>
+      <alias name='ide0-0-0'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+
+# virsh domblklist centos7
+Target     Source
+------------------------------------------------
+hda        /var/opt/mcl/part/data/centos7.centos7_snap01
+hdb        -
+
+# virsh shutdown centos7
+Domain centos7 is being shutdown
+
+# ll /var/opt/mcl/part/data/
+total 1688968
+-rw-r--r-- 1 root root    8585216 Jun 30 14:07 centos7.centos7_snap01
+-rw-r--r-- 1 qemu qemu 1712848896 Jun 30 13:50 centos7.img
+
+# qemu-img commit /var/opt/mcl/part/data/centos7.centos7_snap01 
+Image committed.
+
+# ll /var/opt/mcl/part/data/
+total 1689032
+-rw-r--r-- 1 root root    8585216 Jun 30 14:07 centos7.centos7_snap01
+-rw-r--r-- 1 qemu qemu 1712914432 Jun 30 14:08 centos7.img
+
+# virsh edit centos7
+
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/opt/mcl/part/data/centos7.centos7_snap01'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/opt/mcl/part/data/centos7.img'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+
+
+# virsh start centos7
+Domain centos7 started
+
+
+# virsh domblklist centos7
+Target     Source
+------------------------------------------------
+hda        /var/opt/mcl/part/data/centos7.img
+hdb        -
+
+# virsh dumpxml centos7 > domcentos7-after.xml 
+
+# diff domcentos7-before.xml domcentos7-after.xml 
+1c1
+< <domain type='kvm' id='4'>
+---
+> <domain type='kvm' id='5'>
+42,47c42,43
+<       <source file='/var/opt/mcl/part/data/centos7.centos7_snap01'/>
+<       <backingStore type='file' index='1'>
+<         <format type='qcow2'/>
+<         <source file='/var/opt/mcl/part/data/centos7.img'/>
+<         <backingStore/>
+<       </backingStore>
+---
+>       <source file='/var/opt/mcl/part/data/centos7.img'/>
+>       <backingStore/>
+
+
+[root@centos71 ~]# pwd
+/root
+[root@centos71 ~]# ll
+total 4
+-rw-r--r--. 1 root root    0 Jun 30 13:53 after_snap01.txt
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+
+# ll /var/opt/mcl/part/data/
+total 1681096
+-rw-r--r-- 1 root root    8585216 Jun 30 14:07 centos7.centos7_snap01
+-rw-r--r-- 1 qemu qemu 1712979968 Jun 30 14:22 centos7.img
+
+# lsof | grep /var/opt/mcl/part/data/
+qemu-kvm  4345         qemu   11u      REG                8,4 1712979968  134669291 /var/opt/mcl/part/data/centos7.img
+qemu-kvm  4345 4372    qemu   11u      REG                8,4 1712979968  134669291 /var/opt/mcl/part/data/centos7.img
+qemu-kvm  4345 4486    qemu   11u      REG                8,4 1712979968  134669291 /var/opt/mcl/part/data/centos7.img
+
+# rm /var/opt/mcl/part/data/centos7.centos7_snap01 
+rm: remove regular file '/var/opt/mcl/part/data/centos7.centos7_snap01'? y
+
+# virsh snapshot-list centos7
+ Name                 Creation Time             State
+------------------------------------------------------------
+ centos7_snap01       2021-06-30 13:50:38 +0900 shutoff
+
+
+# virsh snapshot-delete centos7 centos7_snap01 --metadata
+Domain snapshot centos7_snap01 deleted
+
+# virsh snapshot-list centos7
+ Name                 Creation Time             State
+------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 
 
