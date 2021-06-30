@@ -458,7 +458,58 @@ Domain snapshot centos7_snap01 deleted
  Name                 Creation Time             State
 ------------------------------------------------------------
 
+----------------------------------------------------------------------
+■スナップショットのメタデータを削除しただけでは何も変わらない
 
+# virsh shutdown centos7
+
+# virsh snapshot-create-as centos7 centos7_snap01 "20210630" --disk-only --atomic
+Domain snapshot centos7_snap01 created
+
+# virsh start centos7
+Domain centos7 started
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ 2     centos7                        running
+
+# virsh snapshot-list centos7
+Name                 Creation Time             State
+------------------------------------------------------------
+ centos7_snap01       2021-06-30 16:10:41 +0900 shutoff
+
+
+
+# ll /var/opt/mcl/part/data/
+total 1679176
+-rw-r--r-- 1 qemu qemu    5308416 Jun 30 16:11 centos7.centos7_snap01
+-rw-r--r-- 1 qemu qemu 1712979968 Jun 30 16:10 centos7.img
+
+
+# virsh snapshot-delete centos7 centos7_snap01 --metadata
+Domain snapshot centos7_snap01 deleted
+
+# virsh snapshot-list centos7
+ Name                 Creation Time             State
+------------------------------------------------------------
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ 6     centos7                        running
+
+
+# ll /var/opt/mcl/part/data/
+total 1688008
+-rw-r--r-- 1 qemu qemu   15663104 Jun 30 16:13 centos7.centos7_snap01
+-rw-r--r-- 1 qemu qemu 1712979968 Jun 30 16:10 centos7.img
+
+# virsh domblklist centos7
+Target     Source
+------------------------------------------------
+hda        /var/opt/mcl/part/data/centos7.centos7_snap01
+hdb        -
 
 
 
