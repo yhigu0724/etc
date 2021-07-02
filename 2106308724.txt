@@ -173,3 +173,25 @@ Filesystem      Size  Used Avail Use% Mounted on
 Filesystem      Size  Used Avail Use% Mounted on
 [...]
 /dev/sdc         15G  136M   15G   1% /mnt/2
+
+------------------------------
+# blkid
+[...]
+/dev/sdb: LABEL="test" UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sdc: LABEL="test" UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" BLOCK_SIZE="512" TYPE="xfs"
+
+# mount UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" /mnt/1
+[root@rhel83 ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdb         15G  138M   15G   1% /mnt/1
+
+# mount -o nouuid /dev/sdc /mnt/2
+# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdb         15G  138M   15G   1% /mnt/1
+/dev/sdc         15G  136M   15G   1% /mnt/2
+
+
+
