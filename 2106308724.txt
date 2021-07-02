@@ -1,0 +1,175 @@
+# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 8.3 (Ootpa)
+
+# uname -r
+4.18.0-240.el8.x86_64
+
+
+# blkid
+/dev/sda1: SEC_TYPE="msdos" UUID="71A4-C51E" BLOCK_SIZE="512" TYPE="vfat" PARTUUID="b6b5c3c7-01"
+/dev/sda2: UUID="5f38a6d1-3c8c-4a1a-9f94-4196781570d9" BLOCK_SIZE="512" TYPE="xfs" PARTUUID="b6b5c3c7-02"
+/dev/sda3: UUID="a0fa6885-c84d-4d1a-89c6-6b63fc780a7c" TYPE="swap" PARTUUID="b6b5c3c7-03"
+/dev/sda5: UUID="362ecf3f-9fbc-40a3-b960-d89f267e291a" BLOCK_SIZE="512" TYPE="xfs" PARTUUID="b6b5c3c7-05"
+/dev/sdb: UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sdc: UUID="f4a893f8-64f0-408e-a6dc-c60cf37b2f7d" BLOCK_SIZE="512" TYPE="xfs"
+
+
+# xfs_admin -U "08c63fd1-8cfb-44d5-939b-de874b420eaf" /dev/sdc
+Clearing log and setting UUID
+writing all SBs
+new UUID = 08c63fd1-8cfb-44d5-939b-de874b420eaf
+
+# blkid
+[...]
+/dev/sdb: UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sdc: UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" BLOCK_SIZE="512" TYPE="xfs"
+
+# mount /dev/sdb /mnt/1
+
+[root@rhel83 ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        7.7G     0  7.7G   0% /dev
+tmpfs           7.7G     0  7.7G   0% /dev/shm
+tmpfs           7.7G  8.8M  7.7G   1% /run
+tmpfs           7.7G     0  7.7G   0% /sys/fs/cgroup
+/dev/sda5       116G   12G  105G  11% /
+/dev/sda2      1014M  183M  832M  18% /boot
+/dev/sda1       200M  6.9M  193M   4% /boot/efi
+tmpfs           1.6G     0  1.6G   0% /run/user/0
+/dev/sdb         15G  138M   15G   1% /mnt/1
+
+# mount /dev/sdc /mnt/2
+mount: /mnt/2: wrong fs type, bad option, bad superblock on /dev/sdc, missing codepage or helper program, or other error.
+
+# umount /mnt/1
+# mount /dev/sdc /mnt/2
+# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdc         15G  136M   15G   1% /mnt/2
+
+# umount /mnt/2
+
+# xfs_admin -U generate /dev/sdc
+Clearing log and setting UUID
+writing all SBs
+new UUID = 087ae9d2-f8a6-4a69-9336-d6f2276b4056
+
+# blkid
+[...]
+/dev/sdb: UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sdc: UUID="087ae9d2-f8a6-4a69-9336-d6f2276b4056" BLOCK_SIZE="512" TYPE="xfs"
+
+# mount /dev/sdb /mnt/1
+# mount /dev/sdc /mnt/2
+# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdb         15G  138M   15G   1% /mnt/1
+/dev/sdc         15G  136M   15G   1% /mnt/2
+
+
+# touch /mnt/1/test.txt
+[root@rhel83 ~]# ll /mnt/1
+total 0
+-rw-r--r-- 1 root root 0 Jul  1 21:18 test.txt
+
+root@rhel83 ~]# touch /mnt/1/test.txt
+[root@rhel83 ~]# ll /mnt/1
+total 0
+-rw-r--r-- 1 root root 0 Jul  1 21:18 test.txt
+[root@rhel83 ~]# xfs_admin -U generate /dev/sdb
+xfs_admin: /dev/sdb contains a mounted filesystem
+
+fatal error -- couldn't initialize XFS library
+[root@rhel83 ~]# umount /mnt/1
+[root@rhel83 ~]# xfs_admin -U generate /dev/sdb
+Clearing log and setting UUID
+writing all SBs
+new UUID = 9ce06411-21a0-4218-8ab3-ac36b9481f9d
+[root@rhel83 ~]# mount /dev/sdb /mnt/1
+[root@rhel83 ~]# ll /mnt/1
+total 0
+-rw-r--r-- 1 root root 0 Jul  1 21:18 test.txt
+
+# tune2fs -U uuidgen /dev/sdb
+tune2fs 1.45.6 (20-Mar-2020)
+tune2fs: Bad magic number in super-block while trying to open /dev/sdb
+/dev/sdb contains a xfs file system
+
+# blkid
+[...]
+/dev/sdb: UUID="9ce06411-21a0-4218-8ab3-ac36b9481f9d" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sdc: UUID="6e85cf57-8c5f-4097-81f3-48a000608da8" BLOCK_SIZE="4096" TYPE="ext4"
+
+[root@rhel83 ~]# tune2fs -U `uuidgen` /dev/sdc
+tune2fs 1.45.6 (20-Mar-2020)
+Setting the UUID on this filesystem could take some time.
+Proceed anyway (or wait 5 seconds to proceed) ? (y,N) <proceeding>
+
+[root@rhel83 ~]# blkid
+[...]
+/dev/sdb: UUID="9ce06411-21a0-4218-8ab3-ac36b9481f9d" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sdc: UUID="da2bbcba-53bd-4d69-afee-b0e236b54527" BLOCK_SIZE="4096" TYPE="ext4"
+
+
+---------------------------
+
+# blkid
+[...]
+/dev/sdb: UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sdc: UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" BLOCK_SIZE="512" TYPE="xfs"
+
+
+# mount UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" /mnt/1
+# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdb         15G  138M   15G   1% /mnt/1
+
+# mount UUID="08c63fd1-8cfb-44d5-939b-de874b420eaf" /mnt/2
+# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdb         15G  138M   15G   1% /mnt/1
+
+# umount /mnt/1
+# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdb         15G  138M   15G   1% /mnt/2
+-------------------------------
+
+# xfs_admin -l /dev/sdb
+label = ""
+[root@rhel83 ~]# xfs_admin -l /dev/sdc
+label = ""
+[root@rhel83 ~]# xfs_admin -L test /dev/sdb
+writing all SBs
+new label = "test"
+[root@rhel83 ~]# xfs_admin -L test /dev/sdc
+writing all SBs
+new label = "test"
+[root@rhel83 ~]# xfs_admin -l /dev/sdb
+label = "test"
+[root@rhel83 ~]# xfs_admin -l /dev/sdc
+label = "test"
+
+# mount LABEL=test /mnt/1
+[root@rhel83 ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdc         15G  136M   15G   1% /mnt/1
+
+# mount LABEL=test /mnt/2
+
+# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdc         15G  136M   15G   1% /mnt/1
+
+# umount /mnt/1
+# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/sdc         15G  136M   15G   1% /mnt/2
