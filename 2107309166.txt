@@ -1,0 +1,284 @@
+# virsh shutdown centos7
+Domain centos7 is being shutdown
+
+#virsh snapshot-create-as centos7 centos7_snap02 "20210702"
+Domain snapshot centos7_snap02 created
+
+
+
+
+
+# ll /var/opt/mcl/part/data/
+total 1673096
+-rw-r--r-- 1 root root 1713308160 Jul  2 15:06 centos7.img
+
+# virsh snapshot-list centos7
+setlocale: No such file or directory
+ Name                 Creation Time             State
+------------------------------------------------------------
+ centos7_snap02       2021-07-02 15:06:38 +0900 shutoff
+
+
+# qemu-img info /var/opt/mcl/part/data/centos7.img 
+image: /var/opt/mcl/part/data/centos7.img
+file format: qcow2
+virtual size: 15G (16106127360 bytes)
+disk size: 1.6G
+cluster_size: 65536
+Snapshot list:
+ID        TAG                 VM SIZE                DATE       VM CLOCK
+1         centos7_snap02            0 2021-07-02 15:06:38   00:00:00.000
+Format specific information:
+    compat: 1.1
+    lazy refcounts: false
+
+
+[root@centos71 ~]# pwd
+/root
+[root@centos71 ~]# touch test.txt
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+-rw-r--r--. 1 root root    0 Jul  2 15:29 test.txt
+
+
+# virsh shutdown centos7
+setlocale: No such file or directory
+Domain centos7 is being shutdown
+
+
+# virsh snapshot-revert centos7 centos7_snap02
+
+# virsh start centos7
+
+[root@centos71 ~]# pwd
+/root
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+
+# virsh snapshot-list centos7
+setlocale: No such file or directory
+ Name                 Creation Time             State
+------------------------------------------------------------
+ centos7_snap02       2021-07-02 15:06:38 +0900 shutoff
+
+ # qemu-img info /var/opt/mcl/part/data/centos7.img 
+image: /var/opt/mcl/part/data/centos7.img
+file format: qcow2
+virtual size: 15G (16106127360 bytes)
+disk size: 1.6G
+cluster_size: 65536
+Snapshot list:
+ID        TAG                 VM SIZE                DATE       VM CLOCK
+1         centos7_snap02            0 2021-07-02 15:06:38   00:00:00.000
+Format specific information:
+    compat: 1.1
+    lazy refcounts: false
+
+-----------------------------------------------------------------------------------
+
+# touch test.txt
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+-rw-r--r--. 1 root root    0 Jul  2 15:37 test.txt
+
+# virsh shutdown centos7
+setlocale: No such file or directory
+Domain centos7 is being shutdown
+
+# virsh snapshot-delete centos7 centos7_snap02
+setlocale: No such file or directory
+Domain snapshot centos7_snap02 deleted
+
+# virsh start centos7
+setlocale: No such file or directory
+Domain centos7 started
+
+# virsh snapshot-list centos7
+setlocale: No such file or directory
+ Name                 Creation Time             State
+------------------------------------------------------------
+
+
+# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+-rw-r--r--. 1 root root    0 Jul  2 15:37 test.txt
+
+
+-----------------------------------------------
+
+一段飛ばし
+
+# virsh shutdown centos7
+Domain centos7 is being shutdown
+
+# virsh snapshot-info centos7 --current
+error: Domain snapshot not found: the domain does not have a current snapshot
+
+# virsh snapshot-create-as centos7 centos7_snap01 "1st"
+Domain snapshot centos7_snap01 created
+
+# ll /var/opt/mcl/part/data/
+total 1673296
+-rw-r--r-- 1 root root 1993146880 Jul  2 16:23 centos7.img
+
+
+
+# virsh snapshot-list centos7
+ Name                 Creation Time             State
+------------------------------------------------------------
+ centos7_snap01       2021-07-02 16:23:27 +0900 shutoff
+
+ # virsh snapshot-info centos7 --current
+Name:           centos7_snap01
+Domain:         centos7
+Current:        yes
+State:          shutoff
+Location:       internal
+Parent:         -
+Children:       0
+Descendants:    0
+Metadata:       yes
+
+
+
+# virsh start centos7
+Domain centos7 started
+
+
+root@centos71 ~]# pwd
+/root
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+[root@centos71 ~]# touch test1.txt
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+-rw-r--r--. 1 root root    0 Jul  2 16:25 test1.txt
+
+
+# virsh shutdown centos7
+Domain centos7 is being shutdown
+
+# virsh snapshot-create-as centos7 centos7_snap02 "2nd"
+Domain snapshot centos7_snap02 created
+
+# virsh snapshot-list centos7
+ Name                 Creation Time             State
+------------------------------------------------------------
+ centos7_snap01       2021-07-02 16:23:27 +0900 shutoff
+ centos7_snap02       2021-07-02 16:26:00 +0900 shutoff
+ 
+
+
+# ll /var/opt/mcl/part/data
+total 1681364
+-rw-r--r-- 1 root root 1993146880 Jul  2 16:26 centos7.img
+
+# virsh snapshot-info centos7 --current
+Name:           centos7_snap02
+Domain:         centos7
+Current:        yes
+State:          shutoff
+Location:       internal
+Parent:         centos7_snap01
+Children:       0
+Descendants:    0
+Metadata:       yes
+
+
+# virsh start centos7
+Domain centos7 startedd
+
+
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+-rw-r--r--. 1 root root    0 Jul  2 16:25 test1.txt
+[root@centos71 ~]# touch test2.txt
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+-rw-r--r--. 1 root root    0 Jul  2 16:25 test1.txt
+-rw-r--r--. 1 root root    0 Jul  2 16:28 test2.txt
+
+# virsh shutdown centos7
+
+# virsh snapshot-revert centos7 centos7_snap01
+
+# virsh snapshot-info centos7 --current
+Name:           centos7_snap01
+Domain:         centos7
+Current:        yes
+State:          shutoff
+Location:       internal
+Parent:         -
+Children:       1
+Descendants:    1
+Metadata:       yes
+
+# virsh start centos7
+
+root@centos71 ~]# pwd
+/root
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+
+
+
+# virsh shutdown centos7
+
+# virsh snapshot-revert centos7 centos7_snap02
+
+# virsh snapshot-info centos7 --current
+Name:           centos7_snap02
+Domain:         centos7
+Current:        yes
+State:          shutoff
+Location:       internal
+Parent:         centos7_snap01
+Children:       0
+Descendants:    0
+Metadata:       yes
+
+
+# virsh start centos7
+
+[root@centos71 ~]# pwd
+/root
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+-rw-r--r--. 1 root root    0 Jul  2 16:25 test1.txt
+
+# virsh shutdown centos7
+
+# virsh snapshot-list centos7
+ Name                 Creation Time             State
+------------------------------------------------------------
+ centos7_snap01       2021-07-02 16:23:27 +0900 shutoff
+ centos7_snap02       2021-07-02 16:26:00 +0900 shutoff
+
+# virsh snapshot-delete centos7 centos7_snap01 
+Domain snapshot centos7_snap01 deleted
+
+# virsh snapshot-delete centos7 centos7_snap02
+Domain snapshot centos7_snap02 deleted
+
+# virsh snapshot-list centos7
+ Name                 Creation Time             State
+------------------------------------------------------------
+
+# virsh start centos7
+
+[root@centos71 ~]# pwd
+/root
+[root@centos71 ~]# ll
+total 4
+-rw-------. 1 root root 1316 Jun 29 15:10 anaconda-ks.cfg
+-rw-r--r--. 1 root root    0 Jul  2 16:25 test1.txt
