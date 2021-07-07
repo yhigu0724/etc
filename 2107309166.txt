@@ -547,8 +547,20 @@ total 4
 -rw-r--r--. 1 root root    0 Jul  5 09:51 test3.txt
 
 
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+[2021-07-06]
+エラー：サポートされない設定：ディスクvdaの内部スナップショットはストレージ形式rawに対してはサポートされません。
+error: unsupported configuration: internal snapshot for disk vda unsupported for storage type raw
 
+Qcow2 snapshots - snapshot for disk vda unsupported for storage type raw
+https://unix.stackexchange.com/questions/179766/qcow2-snapshots-snapshot-for-disk-vda-unsupported-for-storage-type-raw
 
+Unable to create snapshot of a raw disk while using RHEL KVM
+https://access.redhat.com/solutions/46145
+
+Cannot create a snapshot on kvm
+https://www.linuxhelp.com/questions/cannot-create-a-snapshot-on-kvm
 
 
 
