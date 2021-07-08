@@ -563,6 +563,215 @@ Cannot create a snapshot on kvm
 https://www.linuxhelp.com/questions/cannot-create-a-snapshot-on-kvm
 
 
+KVM のディスクイメージの形式を変換する (qcow2, raw)
+https://akagisho.hatenablog.com/entry/2013/11/23/135139
+
+VirshコマンドによるKVMゲストOSの管理
+https://qiita.com/TsutomuNakamura/items/22d9d2629a8eb9360865
+
+
+----------------------------------------------------------------------
+rawフォーマットのディスクイメージを作成
+----------------------------------------------------------------------
+
+# qemu-img create -f raw /var/opt/mcl/part/data/centos9.img 10G
+Formatting '/var/opt/mcl/part/data/centos9.img', fmt=raw size=10737418240 
+
+# qemu-img info /var/opt/mcl/part/data/centos9.img
+image: /var/opt/mcl/part/data/centos9.img
+file format: raw
+virtual size: 10G (10737418240 bytes)
+disk size: 0
+
+
+# virt-install --connect=qemu:///system \
+--name=centos9 \
+--vcpus=1 \
+--ram=1024 \
+--accelerate \
+--hvm \
+--disk path=/var/opt/mcl/part/data/centos9.img,size=10,format=raw \
+--location='/tmp/CentOS-7-x86_64-Minimal-2009.iso' \
+--network bridge=br0 \
+--nographics \
+--extra-args='console=tty0 console=ttyS0,115200n8'
+
+# qemu-img info /var/opt/mcl/part/data/centos9.img
+image: /var/opt/mcl/part/data/centos9.img
+file format: raw
+virtual size: 10G (10737418240 bytes)
+disk size: 1.6G
+
+# virsh edit centos9
+
+ <disk type='file' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source file='/var/opt/mcl/part/data/centos9.img'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <target dev='hdb' bus='ide'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='0' target='0' unit='1'/>
+    </disk>
+
+# virsh snapshot-create-as centos9 snap01
+error: unsupported configuration: internal snapshot for disk hda unsupported for storage type raw
+
+# qemu-img convert -O qcow2 /var/opt/mcl/part/data/centos9.img /var/opt/mcl/part/data/centos9_qcow2.img
+
+# ll /var/opt/mcl/part/data/
+total 5158816
+-rw-r--r-- 1 root root  1993146880 Jul  5 09:57 centos7.img
+-rw-r--r-- 1 root root 10737418240 Jul  7 15:56 centos9.img
+-rw-r--r-- 1 root root  1645412352 Jul  7 16:34 centos9_qcow2.img
+
+# qemu-img info /var/opt/mcl/part/data/centos9_qcow2.img
+image: /var/opt/mcl/part/data/centos9_qcow2.img
+file format: qcow2
+virtual size: 10G (10737418240 bytes)
+disk size: 1.8G
+cluster_size: 65536
+Format specific information:
+    compat: 1.1
+    lazy refcounts: false
+
+virsh edit centos9
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ 1     centos9                        running
+ -     centos7                        shut off
+
+ # virsh domblklist centos9
+Target     Source
+------------------------------------------------
+hda        /var/opt/mcl/part/data/centos9_qcow2.img
+
+
+# ll /var/opt/mcl/part/data/
+total 7025440
+-rw-r--r-- 1 root root  1993146880 Jul  5 09:57 centos7.img
+-rw-r--r-- 1 root root 10737418240 Jul  7 15:56 centos9.img
+-rw-r--r-- 1 qemu qemu  1645477888 Jul  7 16:59 centos9_qcow2.img
+
+# virsh snapshot-create-as centos9 snap01
+Domain snapshot snap01 created
+
+# ll /var/opt/mcl/part/data/
+total 7025500
+-rw-r--r-- 1 root root  1993146880 Jul  5 09:57 centos7.img
+-rw-r--r-- 1 root root 10737418240 Jul  7 15:56 centos9.img
+-rw-r--r-- 1 qemu qemu  1902903296 Jul  7 17:00 centos9_qcow2.img
+
+
+# virsh snapshot-list centos9
+ Name                 Creation Time             State
+------------------------------------------------------------
+ snap01               2021-07-07 17:00:54 +0900 running
+
+ # qemu-img info /var/opt/mcl/part/data/centos9_qcow2.img
+image: /var/opt/mcl/part/data/centos9_qcow2.img
+file format: qcow2
+virtual size: 10G (10737418240 bytes)
+disk size: 1.8G
+cluster_size: 65536
+Snapshot list:
+ID        TAG                 VM SIZE                DATE       VM CLOCK
+1         snap01                 245M 2021-07-07 17:00:54   00:03:43.093
+Format specific information:
+    compat: 1.1
+    lazy refcounts: false
+
+
+
+----------------------------------------------------------------------
+バックアップ・リストア
+----------------------------------------------------------------------
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ 1     centos9                        running
+ -     centos7                        shut off
+
+ # virsh shutdown centos9
+Domain centos9 is being shutdown
+
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ -     centos7                        shut off
+ -     centos9                        shut off
+
+# virsh dumpxml centos9 > /mnt/backup/centos9.xml
+
+# ll /mnt/backup/
+total 4
+-rw-r--r-- 1 root root 3104 Jul  8 09:56 centos9.xml
+
+
+# cp -p /var/opt/mcl/part/data/centos9.img /mnt/backup
+
+# ll /mnt/backup/
+total 2516664
+-rw-r--r-- 1 root root 10737418240 Jul  8 09:54 centos9.img
+-rw-r--r-- 1 root root        3104 Jul  8 09:56 centos9.xml
+
+ゲストcentos9の削除
+
+# virsh undefine centos9 --remove-all-storage
+Domain centos9 has been undefined
+Volume 'hda'(/var/opt/mcl/part/data/centos9.img) removed.
+
+# shutdown -r now
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ -     centos7                        shut off
+
+
+# ll /etc/libvirt/qemu/
+total 4
+-rw------- 1 root root 3330 Jul  5 09:48 centos7.xml
+drwx------ 3 root root   42 Jun 29 13:45 networks
+
+# ll /var/opt/mcl/part/data/
+total 3280268
+-rw-r--r-- 1 root root 1993146880 Jul  5 09:57 centos7.img
+
+# cp -p /mnt/backup/centos9.img /var/opt/mcl/part/data/
+
+# ll /var/opt/mcl/part/data
+total 4189948
+-rw-r--r-- 1 root root  1993146880 Jul  5 09:57 centos7.img
+-rw-r--r-- 1 root root 10737418240 Jul  8 09:54 centos9.img
+
+# cp -p /mnt/backup/centos9.xml /etc/libvirt/qemu
+
+# ll /etc/libvirt/qemu
+total 8
+-rw------- 1 root root 3330 Jul  5 09:48 centos7.xml
+-rw-r--r-- 1 root root 3104 Jul  8 09:56 centos9.xml
+drwx------ 3 root root   42 Jun 29 13:45 networks
+
+# virsh define /etc/libvirt/qemu/centos9.xml 
+Domain centos9 defined from /etc/libvirt/qemu/centos9.xml
+
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ -     centos7                        shut off
+ -     centos9                        shut off
+
+# virsh start centos9
+Domain centos9 started
 
 
 
