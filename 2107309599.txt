@@ -1,0 +1,13 @@
+bash-3.2$ tcpdump  -tttt -nn -r 03.cap 
+reading from file 03.cap, link-type EN10MB (Ethernet)
+2021-07-08 21:41:56.183881 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124567615 ecr 0,sackOK,eol], length 0
+2021-07-08 21:41:57.186772 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124568615 ecr 0,sackOK,eol], length 0
+2021-07-08 21:41:58.189903 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124569616 ecr 0,sackOK,eol], length 0
+2021-07-08 21:41:59.191036 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124570616 ecr 0,sackOK,eol], length 0
+2021-07-08 21:42:00.200032 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124571616 ecr 0,sackOK,eol], length 0
+2021-07-08 21:42:01.199559 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124572616 ecr 0,sackOK,eol], length 0
+2021-07-08 21:42:03.209010 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124574616 ecr 0,sackOK,eol], length 0
+2021-07-08 21:42:07.212848 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124578616 ecr 0,sackOK,eol], length 0
+2021-07-08 21:42:15.225111 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124586616 ecr 0,sackOK,eol], length 0
+2021-07-08 21:42:31.246844 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 4124602616 ecr 0,sackOK,eol], length 0
+2021-07-08 21:43:03.308778 IP 192.168.24.16.65257 > 192.168.25.11.22: Flags [S], seq 559515557, win 65535, options [mss 1460,sackOK,eol], length 0
