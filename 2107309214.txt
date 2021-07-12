@@ -1,0 +1,11 @@
+LinuxのCPU使用率の%stealについて
+https://www.na3.jp/entry/20191212/p1
+
+リソース制御でサービスレベルを確保せよ
+https://www.atmarkit.co.jp/ait/articles/0803/18/news147.html
+
+ mpstatコマンド――CPUごとの使用率を表示する
+https://www.atmarkit.co.jp/ait/articles/1707/14/news020.html
+
+
+
